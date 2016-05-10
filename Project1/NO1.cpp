@@ -59,15 +59,14 @@ void ShowList(const List * headnode)
 
 void CombineLists(List * & headnode1, List * & headnode2, List * & headnode3)
 {
-	headnode3->next = NULL;
 	List  *H1, *H2, *H3;
 	H1 = headnode1;
 	H2 = headnode2;
-	H3 = headnode3->next;
+	H3 = headnode3;
 
 	while (H1 && H2)
 	{
-		/*if (headnode3 == NULL)
+		if (headnode3 == NULL)
 		{
 			if (H1->data >= H2->data)
 			{
@@ -81,9 +80,8 @@ void CombineLists(List * & headnode1, List * & headnode2, List * & headnode3)
 				headnode3 = H3;
 				H1 = H1->next;
 			}
-
 			continue;
-		}*/
+		}
 
 		if (H1->data >= H2->data)
 		{
@@ -101,7 +99,6 @@ void CombineLists(List * & headnode1, List * & headnode2, List * & headnode3)
 
 	H3->next = H1 ? H1 : H2;
 	H3 = H3->next;
-	delete headnode2;
 }
 
 
