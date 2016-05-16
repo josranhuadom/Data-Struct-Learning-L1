@@ -47,7 +47,6 @@ void insert(List * & headnode, int num)
 //展示链表数据
 void ShowList(const List * headnode)
 {
-	cout << "您所输入的数为：";
 	while (headnode)
 	{
 		cout << headnode->data;
@@ -101,6 +100,27 @@ void CombineLists(List * & headnode1, List * & headnode2, List * & headnode3)
 	H3 = H3->next;
 }
 
+void Cancel(List * & headnode, int num)
+{
+	List * save, * H3;
+	H3 = headnode;
+	int j = 1;
+	while ((H3->next) && (j < num))
+	{
+		H3 = H3->next;
+		++j;
+	}
+	if (!(H3->next) && (j > num))
+	{
+		cout << "数据错误" << endl;
+		return;
+	}
+	save = H3;
+	H3 = save->next;
+	delete save;
+	return;
+}
+
 
 int main()
 {
@@ -114,10 +134,10 @@ int main()
 		insert(headnode1, k);
 		cin >> k;
 	}
+	cout << "您输入的数为：";
 	ShowList(headnode1);  //输出链表
 
 	cout << endl;
-
 	//以下输入第二个链表，用于第二小问
 	List * headnode2 = NULL;
 	cout << "请输入第二个链表" << endl;
@@ -128,12 +148,33 @@ int main()
 		insert(headnode2, k);
 		cin >> k;
 	}
+	cout << "您输入的数为";
 	ShowList(headnode2);
 
+	cout << endl;
+
+	//以下是合并链表部分
 	cout << "合并链表" << endl;
 	List * headnode3 = NULL;
 	CombineLists(headnode1, headnode2, headnode3);
+	cout << "合并后";
 	ShowList(headnode3);
+
+	cout << endl;
+
+	//以下是删除节点部分
+	char judgement;
+	do
+	{
+		char judgement;
+		cout << "接下来是删除节点，请问想删除哪一个节点？" << endl;
+		cin >> k;
+		Cancel(headnode3, k);
+		cout << "删除后";
+		ShowList(headnode3);
+		cout << "想继续删除节点请按Y，想退出可按其余按键" << endl;
+		cin >> judgement;
+	} while (judgement = 'Y');
 
 	system("pause");
 }
