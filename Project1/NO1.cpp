@@ -1,8 +1,8 @@
+//非递减顺序排列
 #include<iostream>
 using namespace std;
 struct List
 	//构建构建新节点的结构体
-	//非递减顺序排列
 {
 	int data;
 	List * next;
