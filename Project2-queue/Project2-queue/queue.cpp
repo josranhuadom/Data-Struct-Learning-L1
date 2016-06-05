@@ -1,12 +1,14 @@
 #include<iostream>
 using namespace std;
 
+//链栈的储存结构
 struct StackNode
 {
 	char bracket;
 	struct StackNode *next;
 };
 
+//入栈
 void Push(StackNode *&S, char bracket)
 {
 	StackNode *p = new StackNode;
@@ -15,15 +17,17 @@ void Push(StackNode *&S, char bracket)
 	S = p;
 }
 
+//取栈顶元素
 char GetTop(StackNode *& S)
 {
 	if (S != NULL)
 		return S->bracket;
 }
 
+//出栈
 void Pop(StackNode *&S)
 {
-	StackNode /**e, */*p;
+	StackNode *p;
 	if (S == NULL)
 		return;
 	//e->bracket = S->bracket;
@@ -33,6 +37,7 @@ void Pop(StackNode *&S)
 	return;
 }
 
+//括号匹配函数
 void Checking(StackNode *&S, char bracket)
 {
 	int flag = 1;
@@ -82,11 +87,8 @@ int main()
 {
 	StackNode *S = NULL;
 	char bracket;
-	cout << "可以输入'(', ')', '[', ']', '{', '}'，输入'#'来结束输入" << endl;
+	cout << "可以输入'(', ')', '[', ']', '{', '}'，输入'#'来结束输入（注意请使用英文字符）" << endl;
 	cin >> bracket;
-	//Push(S, bracket);
-	//cout << GetTop(S) << endl;
-	//Push(S, bracket);
 	Checking(S, bracket);
 	system("pause");
 }

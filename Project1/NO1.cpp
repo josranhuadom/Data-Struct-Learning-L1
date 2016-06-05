@@ -1,17 +1,19 @@
 //非递减顺序排列
 #include<iostream>
 using namespace std;
+
+//构建构建新节点的结构体
 struct List
-	//构建构建新节点的结构体
 {
 	int data;
 	List * next;
 };
 
+//插入链表函数
 void insert(List * & headnode, int num)
 {
 	List *s, *p = headnode, *q;   //*s用于建立新节点 *p用于跟踪最新结点
-								  //以下三行为构建新结点
+	//以下三行为构建新结点
 	s = new List;
 	s->data = num;
 	s->next = NULL;
@@ -46,218 +48,137 @@ void insert(List * & headnode, int num)
 	return;
 }
 
+//展示链表函数
 void ShowList(const List * headnode)
 {
-	cout << "您所输入的数为：";
-	while (headnode)
-	{
-		cout << headnode->data << '\t';
-		headnode = headnode->next;
-	}
-	cout << endl;
-}
-int main()
-{
-	int k = 0, m = 0;  //k用于输入新数据 m用于计算节点数
-	List * headnode = new List;
-	headnode->next = NULL;
-	cout << "请输入除零以外的任何数" << endl;
-	cin >> k;
-	while (k != 0)
-	{
-		insert(headnode, k);
-		cin >> k;
-		m++;
-		headnode->data = m;
-	}
-	ShowList(headnode);  //输出链表
-
-
-	system("pause");
-}
-
-
-
-
-
-/*#include<iostream>
-using namespace std;
-struct List
-	//构建构建新节点的结构体
-	//非递减顺序排列
-{
-	int data;
-	List * next;
-};
-
-void insert(List * & headnode, int num)
-{
-		List *s, *p, *q;   //*s用于建立新节点 *p用于跟踪最新结点
-		//以下三行为构建新结点
-		s = new List;
-		s->data = num;
-		s->next = NULL;
-
-		//以下if语句用于插入第一个结点
-		if (headnode == NULL)
-		{
-			headnode = s;
-			return;
-		}
-
-		//新节点数据最小时的操作
-		if (headnode->data > s->data)
-		{
-			s->next = headnode;
-			headnode= s;
-			return;
-		}
-
-		//常规对比插入排序
-		for (q = headnode, p = headnode->next; p; q = p, p = p->next)
-			if (p->data >= s->data)
-			{
-				s->next = p;
-				q->next = s;
-				return;
-			}
-		q->next = s;
-		return;
-
-	}
-
-//展示链表数据
-void ShowList(const List * headnode)
-{
+	if (headnode->data != NULL)
+		cout << "此单链表一共有" << headnode->data << "个元素" << endl;
+	headnode = headnode->next;
 	while (headnode)
 	{
 		cout << headnode->data;
 		headnode = headnode->next;
-		cout << '<';
+		if(headnode)
+			cout << '<';
 	}
 	cout << endl;
+
 }
 
-void CombineLists(List * & headnode1, List * & headnode2, List * & headnode3)
+//合并链表函数
+void MergeList(List *&headnode1, List *&headnode2, List *&headnode3)
 {
-	List  *H1, *H2, *H3;
-	H1 = headnode1;
-	H2 = headnode2;
-	H3 = headnode3;
+	List *pa, *pb, *pc;
+	pa = headnode1->next; pb = headnode2->next;   //pa 和 pb 的初值分别指向两个表的第一个结点
+	headnode3 = headnode1;  //将 headnode1 的头结点作为 headnode3 的头结点
+	pc = headnode3;   //pc 的初值指向 headnode3 的头结点
 
-	while (H1 && H2)
-	{
-		if (headnode3 == NULL)
-		{
-			if (H1->data >= H2->data)
-			{
-				H3 = H2;
-				headnode3 = H3;
-				H2 = H2->next;
-			}
-			else
-			{
-				H3 = H1;
-				headnode3 = H3;
-				H1 = H1->next;
-			}
-			continue;
-		}
+	headnode3->data = headnode1->data + headnode3->data;
 
-		if (H1->data >= H2->data)
+	while (pa && pb)
+	{//pa 和 pb 均没有到达 headnode1, headnode2 表尾，依次摘取两表中值较小的结点插入到 headnode3 最后
+		if (pa->data <= pb->data)
 		{
-			H3->next = H2;
-			H3 = H2;
-			H2 = H2->next;
+			pc->next = pa;
+			pc = pa;
+			pa = pa->next;
 		}
 		else
 		{
-			H3->next = H1;
-			H3 = H1;
-			H1 = H1->next;
+			pc->next = pb;
+			pc = pb;
+			pb = pb->next;
 		}
 	}
 
-	H3->next = H1 ? H1 : H2;
-	H3 = H3->next;
+	pc->next = pa ? pa : pb;
+	delete headnode2;
 }
 
-void Cancel(List * & headnode, int num)
+//删除链表函数
+void Delete(List *&headnode, int num)
 {
-	List * save, * H3;
-	H3 = headnode;
-	int j = 1;
-	while ((H3->next) && (j < num))
-	{
-		H3 = H3->next;
-		++j;
-	}
-	if (!(H3->next) && (j > num))
-	{
-		cout << "数据错误" << endl;
+	List *p = headnode;
+	List *q;
+	int j = 0;
+	--headnode->data;
+	while ((p->next) && (j < num - 1))
+	{p = p->next; ++j;}
+	if (!(p->next) || (j > num - 1))
 		return;
-	}
-	save = H3;
-	H3 = save->next;
-	delete save;
+	q = p->next;
+	p->next = q->next;
+	delete q;
 	return;
 }
 
-
 int main()
 {
-	int k;
-	List * headnode1 = NULL;
-	cout << "请输入第一个链表" << endl;
-	cout << "请输入除零以外的任何数" << endl;
+	cout << "//////////////////////////////输入链表///////////////////////////" << endl;
+	int k = 0, m = 0;  //k用于输入新数据 m用于计算节点数
+	List * headnode1 = new List;
+	headnode1->next = NULL;
+	cout << "输入第一个链表" << endl;
+	cout << "请输入除零以外的任何数（输入0以结束输入）" << endl;
 	cin >> k;
 	while (k != 0)
 	{
 		insert(headnode1, k);
 		cin >> k;
+		m++;
 	}
-	cout << "您输入的数为：";
+	headnode1->data = m;
 	ShowList(headnode1);  //输出链表
 
-	cout << endl;
-	//以下输入第二个链表，用于第二小问
-	List * headnode2 = NULL;
-	cout << "请输入第二个链表" << endl;
-	cout << "请输入除零以外的任何数" << endl;
+	//输入第二个链表
+	cout << endl << endl;
+	k = 0; m = 0;
+	List *headnode2 = new List;
+	headnode2->next = NULL;
+	cout << "输入第二个链表" << endl;
+	cout << "请输入除零以外的任何数（输入0以结束输入）" << endl;
 	cin >> k;
 	while (k != 0)
 	{
 		insert(headnode2, k);
 		cin >> k;
+		m++;
 	}
-	cout << "您输入的数为";
+	headnode2->data = m;
 	ShowList(headnode2);
 
 	cout << endl;
-
-	//以下是合并链表部分
-	cout << "合并链表" << endl;
-	List * headnode3 = NULL;
-	CombineLists(headnode1, headnode2, headnode3);
-	cout << "合并后";
+	cout << "//////////////////////////////合并链表///////////////////////////////" << endl;
+	List *headnode3 = new List;  //新建单链表headnode3用于存放合并表
+	headnode3->data = NULL;
+	MergeList(headnode1, headnode2, headnode3);
 	ShowList(headnode3);
 
 	cout << endl;
-
-	//以下是删除节点部分
-	char judgement;
-	do
+	cout << "//////////////////////////////删除链表///////////////////////////////" << endl;
+	int num, choose;
+	cout << "请输入您想删除的结点所在的位置" << endl;
+	cin >> num;
+	Delete(headnode3, num);
+	cout << "删除完成" << endl;
+	ShowList(headnode3);
+	cout << endl;
+	cout << "是否继续删除，是请按1，否请按0" << endl;
+	cin >> choose;
+	while (choose == 1)
 	{
-		char judgement;
-		cout << "接下来是删除节点，请问想删除哪一个节点？" << endl;
-		cin >> k;
-		Cancel(headnode3, k);
-		cout << "删除后";
+		cout << "请输入您想删除的结点所在的位置" << endl;
+		cin >> num;
+		Delete(headnode3, num);
+		cout << "删除完成" << endl;
 		ShowList(headnode3);
-		cout << "想继续删除节点请按Y，想退出可按其余按键" << endl;
-		cin >> judgement;
-	} while (judgement = 'Y');
+		cout << endl;
+		cout << "是否继续删除，是请按1，否请按0" << endl;
+		cin >> choose;
+	}
+
+
 
 	system("pause");
 }
-*/
+
